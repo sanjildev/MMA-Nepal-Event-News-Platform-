@@ -1,5 +1,5 @@
 MMA Nepal — Event & News Platform
-A full-stack web application built with Python and Flask for managing and displaying MMA events, fighter profiles, and news — with a special focus on Nepali fighters and events.
+A full-stack web application built with Python and Flask for managing and displaying MMA events, fighter profiles, and news with a special focus on Nepali fighters and events.
 
 Features
 1. Public Pages
