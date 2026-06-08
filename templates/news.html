@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Header -->
+<div style="border-bottom: 2px solid #D20A0A;
+            padding-bottom: 16px; margin-bottom: 24px;">
+    <h2 style="font-weight: 900; text-transform: uppercase;
+               letter-spacing: 2px; color: #FAFBFD; margin: 0;">
+        Latest News
+    </h2>
+</div>
+
+<!-- Category Filter -->
+<div class="mb-4" style="display: flex; gap: 8px; flex-wrap: wrap;">
+    <a href="{{ url_for('news') }}"
+       class="{% if active_category == 'All' %}btn-ufc{% else %}btn-ufc-outline{% endif %} btn btn-sm">
+        All
+    </a>
+    {% for cat in ['UFC News', 'Nepali MMA', 'Fighter News', 'Event Preview', 'Event Results'] %}
+        <a href="{{ url_for('news_category', category=cat) }}"
+           class="{% if active_category == cat %}btn-ufc{% else %}btn-ufc-outline{% endif %} btn btn-sm">
+            {{ cat }}
+        </a>
+    {% endfor %}
+</div>
+
+<!-- News Grid -->
+{% if posts %}
+<div class="row">
+    {% for post in posts %}
+    <div class="col-md-4 mb-4">
+        <div class="ufc-card h-100 p-0">
+            {% if post.image %}
+                <img src="{{ url_for('static', filename='images/posts/' + post.image) }}"
+                     alt="{{ post.title }}"
+                     style="width: 100%; height: 200px;
+                            object-fit: cover; object-position: center;
+                            border-radius: 4px 4px 0 0;">
+            {% else %}
+                <div style="width: 100%; height: 200px;
+                            background: linear-gradient(135deg, #2A0000, #19191E);
+                            border-radius: 4px 4px 0 0;
+                            display: flex; align-items: center;
+                            justify-content: center;">
+                    <span style="color: #D20A0A; font-size: 2rem;">📰</span>
+                </div>
+            {% endif %}
+            <div class="p-3">
+                <span class="badge-ufc mb-2 d-inline-block">
+                    {{ post.category }}
+                </span>
+                <h5 style="font-weight: 700; text-transform: uppercase;
+                           font-size: 0.95rem; margin-top: 8px;
+                           color: #FAFBFD;">
+                    {{ post.title }}
+                </h5>
+                <p style="color: #888888; font-size: 0.85rem;">
+                    {{ post.summary }}
+                </p>
+            </div>
+            <div class="p-3 d-flex justify-content-between align-items-center"
+                 style="border-top: 1px solid #3A3A42;">
+                <div>
+                    <small style="color: #666666;">
+                        {{ post.date_posted }}
+                    </small>
+                    <br>
+                    <small style="color: #666666;">
+                        By {{ post.author }}
+                    </small>
+                </div>
+                <a href="{{ url_for('post_detail', id=post.id) }}"
+                   class="btn-ufc btn btn-sm">
+                    Read More
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+    <div class="text-center py-5">
+        <p style="color: #666666; text-transform: uppercase;
+                  letter-spacing: 2px;">
+            No posts yet!
+        </p>
+    </div>
+{% endif %}
+
+{% endblock %}

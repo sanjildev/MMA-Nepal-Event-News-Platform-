@@ -1,0 +1,261 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div style="border-bottom: 2px solid #D20A0A;
+            padding-bottom: 16px; margin-bottom: 24px;">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <p style="color: #D20A0A; text-transform: uppercase;
+                      letter-spacing: 3px; font-size: 0.75rem;
+                      margin-bottom: 4px;">Admin Panel</p>
+            <h2 style="font-weight: 900; text-transform: uppercase;
+                       letter-spacing: 2px; color: #FAFBFD; margin: 0;">
+                Edit Fighter — {{ fighter.name }}
+            </h2>
+        </div>
+        <a href="{{ url_for('admin_fighters') }}" class="btn-ufc-outline btn">
+            Back to Fighters
+        </a>
+    </div>
+</div>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div style="background: #0a2a0a; border: 1px solid #00aa00;
+                        color: #00ff00; padding: 10px 14px;
+                        border-radius: 4px; margin-bottom: 16px;">
+                ✅ {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<div class="ufc-card p-4">
+    <form method="POST" enctype="multipart/form-data">
+
+        <h5 style="color: #D20A0A; font-weight: 900;
+                   text-transform: uppercase; letter-spacing: 2px;
+                   border-bottom: 1px solid #3A3A42;
+                   padding-bottom: 10px; margin-bottom: 20px;">
+            Basic Information
+        </h5>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Fighter Name *</label>
+                <input type="text" name="name"
+                       class="form-control"
+                       value="{{ fighter.name }}" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Nickname</label>
+                <input type="text" name="nickname"
+                       class="form-control"
+                       value="{{ fighter.nickname }}">
+            </div>
+        </div>
+
+        <!-- Image Upload -->
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <label>Fighter Photo</label>
+                {% if fighter.image %}
+                    <div class="mb-2">
+                        <img src="{{ url_for('static', filename='images/fighters/' + fighter.image) }}"
+                             alt="{{ fighter.name }}"
+                             style="height: 120px; border-radius: 4px;
+                                    border: 2px solid #D20A0A;">
+                        <small style="color: #888888; display: block;
+                                      margin-top: 4px;">
+                            Current photo
+                        </small>
+                    </div>
+                {% endif %}
+                <input type="file"
+                       name="image"
+                       class="form-control"
+                       accept="image/*">
+                <small style="color: #666666;">
+                    Upload new photo to replace current one
+                </small>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Nationality</label>
+                <select name="nationality" class="form-control">
+                    <option value="">Select Country</option>
+                    <option value="Nepal"
+                        {% if fighter.nationality == 'Nepal' %}selected{% endif %}>
+                        🇳🇵 Nepal
+                    </option>
+                    <optgroup label="All Countries">
+                    {% for country in countries %}
+                        <option value="{{ country }}"
+                            {% if country == fighter.nationality %}selected{% endif %}>
+                            {{ country }}
+                        </option>
+                    {% endfor %}
+                    </optgroup>
+                </select>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Weight Class</label>
+                <select name="weight_class" class="form-control">
+                    {% for wc in ['Strawweight','Flyweight','Bantamweight','Featherweight','Lightweight','Welterweight','Middleweight','Light Heavyweight','Heavyweight'] %}
+                        <option value="{{ wc }}"
+                            {% if wc == fighter.weight_class %}selected{% endif %}>
+                            {{ wc }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Fighting Style</label>
+                <select name="fighting_style" class="form-control">
+                    {% for style in ['Boxing','BJJ','Wrestling','Muay Thai','Kickboxing','Sambo','MMA'] %}
+                        <option value="{{ style }}"
+                            {% if style == fighter.fighting_style %}selected{% endif %}>
+                            {{ style }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <h5 style="color: #D20A0A; font-weight: 900;
+                   text-transform: uppercase; letter-spacing: 2px;
+                   border-bottom: 1px solid #3A3A42;
+                   padding-bottom: 10px; margin-bottom: 20px;
+                   margin-top: 20px;">
+            Fight Record
+        </h5>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label>Wins</label>
+                <input type="number" name="wins"
+                       class="form-control"
+                       value="{{ fighter.wins }}">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Losses</label>
+                <input type="number" name="losses"
+                       class="form-control"
+                       value="{{ fighter.losses }}">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Draws</label>
+                <input type="number" name="draws"
+                       class="form-control"
+                       value="{{ fighter.draws }}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label>Wins by KO</label>
+                <input type="number" name="wins_by_ko"
+                       class="form-control"
+                       value="{{ fighter.wins_by_ko }}">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Wins by Submission</label>
+                <input type="number" name="wins_by_sub"
+                       class="form-control"
+                       value="{{ fighter.wins_by_sub }}">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Wins by Decision</label>
+                <input type="number" name="wins_by_dec"
+                       class="form-control"
+                       value="{{ fighter.wins_by_dec }}">
+            </div>
+        </div>
+
+        <h5 style="color: #D20A0A; font-weight: 900;
+                   text-transform: uppercase; letter-spacing: 2px;
+                   border-bottom: 1px solid #3A3A42;
+                   padding-bottom: 10px; margin-bottom: 20px;
+                   margin-top: 20px;">
+            Social Media
+        </h5>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label>Instagram URL</label>
+                <input type="text" name="instagram"
+                       class="form-control"
+                       value="{{ fighter.instagram }}">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Facebook URL</label>
+                <input type="text" name="facebook"
+                       class="form-control"
+                       value="{{ fighter.facebook }}">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Twitter URL</label>
+                <input type="text" name="twitter"
+                       class="form-control"
+                       value="{{ fighter.twitter }}">
+            </div>
+        </div>
+
+        <h5 style="color: #D20A0A; font-weight: 900;
+                   text-transform: uppercase; letter-spacing: 2px;
+                   border-bottom: 1px solid #3A3A42;
+                   padding-bottom: 10px; margin-bottom: 20px;
+                   margin-top: 20px;">
+            Nepali Fighter Details 🇳🇵
+        </h5>
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <div class="form-check">
+                    <input type="checkbox" name="is_nepali"
+                           class="form-check-input" id="is_nepali"
+                           {% if fighter.is_nepali %}checked{% endif %}>
+                    <label class="form-check-label" for="is_nepali"
+                           style="color: #FAFBFD; text-transform: none;
+                                  font-size: 0.9rem;">
+                        This is a Nepali Fighter
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label>Province</label>
+                <select name="province" class="form-control">
+                    <option value="">Select Province</option>
+                    {% for p in ['Koshi','Madhesh','Bagmati','Gandaki','Lumbini','Karnali','Sudurpashchim'] %}
+                        <option value="{{ p }}"
+                            {% if p == fighter.province %}selected{% endif %}>
+                            {{ p }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Gym / Training Camp</label>
+                <input type="text" name="gym"
+                       class="form-control"
+                       value="{{ fighter.gym }}">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Coach</label>
+                <input type="text" name="coach"
+                       class="form-control"
+                       value="{{ fighter.coach }}">
+            </div>
+        </div>
+
+        <button type="submit" class="btn-ufc btn w-100 mt-3">
+            Save Changes
+        </button>
+
+    </form>
+</div>
+
+{% endblock %}

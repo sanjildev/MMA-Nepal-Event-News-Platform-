@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div style="border-bottom: 2px solid #D20A0A;
+            padding-bottom: 16px; margin-bottom: 24px;">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <p style="color: #D20A0A; text-transform: uppercase;
+                      letter-spacing: 3px; font-size: 0.75rem;
+                      margin-bottom: 4px;">Admin Panel</p>
+            <h2 style="font-weight: 900; text-transform: uppercase;
+                       letter-spacing: 2px; color: #FAFBFD; margin: 0;">
+                Add New Event
+            </h2>
+        </div>
+        <a href="{{ url_for('admin') }}" class="btn-ufc-outline btn">
+            Dashboard
+        </a>
+    </div>
+</div>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div style="background: #0a2a0a; border: 1px solid #00aa00;
+                        color: #00ff00; padding: 10px 14px;
+                        border-radius: 4px; margin-bottom: 16px;">
+                ✅ {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<div class="ufc-card p-4">
+    <form method="POST" enctype="multipart/form-data">
+
+        <h5 style="color: #D20A0A; font-weight: 900;
+                   text-transform: uppercase; letter-spacing: 2px;
+                   border-bottom: 1px solid #3A3A42;
+                   padding-bottom: 10px; margin-bottom: 20px;">
+            Event Information
+        </h5>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Event Name *</label>
+                <input type="text" name="name"
+                       class="form-control"
+                       placeholder="UFC 310" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Organization</label>
+                <select name="organization" class="form-control">
+                    <option value="">Select Organization</option>
+                    {% for org in ['UFC','PFL','Bellator','ONE FC','Nepal MMA','Other'] %}
+                        <option value="{{ org }}">{{ org }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="row">
+    <div class="col-md-12 mb-3">
+        <label>Event Poster / Image</label>
+        <input type="file"
+               name="image"
+               class="form-control"
+               accept="image/*">
+        <small style="color: #666666;">
+            Recommended: Event poster or banner image
+        </small>
+    </div>
+</div>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label>Date</label>
+                <input type="date" name="date" class="form-control">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Event Time (ET)</label>
+                <input type="text" name="event_time"
+                       class="form-control"
+                       placeholder="10:00 PM ET">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Nepal Time 🇳🇵</label>
+                <input type="text" name="nepal_time"
+                       class="form-control"
+                       placeholder="7:45 AM Sunday">
+            </div>
+        </div>
+
+        <h5 style="color: #D20A0A; font-weight: 900;
+                   text-transform: uppercase; letter-spacing: 2px;
+                   border-bottom: 1px solid #3A3A42;
+                   padding-bottom: 10px; margin-bottom: 20px;
+                   margin-top: 20px;">
+            Location
+        </h5>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label>Venue</label>
+                <input type="text" name="venue"
+                       class="form-control"
+                       placeholder="T-Mobile Arena">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>City</label>
+                <input type="text" name="city"
+                       class="form-control"
+                       placeholder="Las Vegas">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Country</label>
+                <input type="text" name="country"
+                       class="form-control"
+                       placeholder="USA">
+            </div>
+        </div>
+
+        <h5 style="color: #D20A0A; font-weight: 900;
+                   text-transform: uppercase; letter-spacing: 2px;
+                   border-bottom: 1px solid #3A3A42;
+                   padding-bottom: 10px; margin-bottom: 20px;
+                   margin-top: 20px;">
+            Fight Card
+        </h5>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Main Event</label>
+                <input type="text" name="main_event"
+                       class="form-control"
+                       placeholder="Jones vs Miocic">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Co-Main Event</label>
+                <input type="text" name="co_main_event"
+                       class="form-control"
+                       placeholder="Pereira vs Hill">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <label>Description</label>
+                <textarea name="description"
+                          class="form-control" rows="4"
+                          placeholder="Write about this event...">
+                </textarea>
+            </div>
+        </div>
+
+        <h5 style="color: #D20A0A; font-weight: 900;
+                   text-transform: uppercase; letter-spacing: 2px;
+                   border-bottom: 1px solid #3A3A42;
+                   padding-bottom: 10px; margin-bottom: 20px;
+                   margin-top: 20px;">
+            Broadcast
+        </h5>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Where to Watch</label>
+                <select name="where_to_watch" class="form-control">
+                    <option value="">Select Platform</option>
+                    {% for platform in ['ESPN+','UFC Fight Pass','PPV','ESPN','Other'] %}
+                        <option value="{{ platform }}">{{ platform }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="form-check mt-4">
+                    <input type="checkbox" name="is_completed"
+                           class="form-check-input" id="is_completed">
+                    <label class="form-check-label"
+                           for="is_completed"
+                           style="color: #FAFBFD; text-transform: none;
+                                  font-size: 0.9rem;">
+                        Event Already Completed
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-ufc btn w-100 mt-3">
+            Add Event
+        </button>
+
+    </form>
+</div>
+
+{% endblock %}

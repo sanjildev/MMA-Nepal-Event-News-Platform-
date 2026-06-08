@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div style="border-bottom: 2px solid #D20A0A;
+            padding-bottom: 16px; margin-bottom: 24px;">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <p style="color: #D20A0A; text-transform: uppercase;
+                      letter-spacing: 3px; font-size: 0.75rem;
+                      margin-bottom: 4px;">Admin Panel</p>
+            <h2 style="font-weight: 900; text-transform: uppercase;
+                       letter-spacing: 2px; color: #FAFBFD; margin: 0;">
+                Add Fight Result
+            </h2>
+        </div>
+        <a href="{{ url_for('event_fights', event_id=fight.event_id) }}"
+           class="btn-ufc-outline btn">
+            Back to Fight Card
+        </a>
+    </div>
+</div>
+
+<!-- Fight Display -->
+<div class="ufc-card p-4 mb-4"
+     style="border-color: #D20A0A;">
+    <div class="row align-items-center text-center">
+        <div class="col-md-5">
+            <h3 style="font-weight: 900; text-transform: uppercase;
+                       color: #FAFBFD;">
+                {{ fight.fighter1 }}
+            </h3>
+            <p style="color: #888888;">{{ fight.fighter1_record }}</p>
+        </div>
+        <div class="col-md-2">
+            <p style="color: #D20A0A; font-weight: 900;
+                      font-size: 2rem;">VS</p>
+            <p style="color: #666666; font-size: 0.8rem;">
+                {{ fight.weight_class }}
+            </p>
+        </div>
+        <div class="col-md-5">
+            <h3 style="font-weight: 900; text-transform: uppercase;
+                       color: #FAFBFD;">
+                {{ fight.fighter2 }}
+            </h3>
+            <p style="color: #888888;">{{ fight.fighter2_record }}</p>
+        </div>
+    </div>
+</div>
+
+<!-- Result Form -->
+<div class="ufc-card p-4">
+    <form method="POST">
+
+        <h5 style="color: #D20A0A; font-weight: 900;
+                   text-transform: uppercase; letter-spacing: 2px;
+                   border-bottom: 1px solid #3A3A42;
+                   padding-bottom: 10px; margin-bottom: 20px;">
+            Fight Result
+        </h5>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Winner *</label>
+                <select name="winner" class="form-control" required>
+                    <option value="">Select Winner</option>
+                    <option value="{{ fight.fighter1 }}">
+                        {{ fight.fighter1 }}
+                    </option>
+                    <option value="{{ fight.fighter2 }}">
+                        {{ fight.fighter2 }}
+                    </option>
+                    <option value="Draw">Draw</option>
+                    <option value="No Contest">No Contest</option>
+                </select>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Method</label>
+                <select name="method" class="form-control">
+                    <option value="">Select Method</option>
+                    {% for m in ['KO/TKO', 'Submission', 'Decision (Unanimous)', 'Decision (Split)', 'Decision (Majority)', 'Draw', 'No Contest', 'DQ'] %}
+                        <option value="{{ m }}">{{ m }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label>Round</label>
+                <select name="round_finished" class="form-control">
+                    <option value="">Select Round</option>
+                    {% for r in [1,2,3,4,5] %}
+                        <option value="{{ r }}">Round {{ r }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Time</label>
+                <input type="text" name="time_finished"
+                       class="form-control"
+                       placeholder="4:32">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Bonus</label>
+                <select name="bonus" class="form-control">
+                    <option value="">No Bonus</option>
+                    {% for b in ['Performance of the Night', 'Fight of the Night', 'KO of the Night', 'Submission of the Night'] %}
+                        <option value="{{ b }}">{{ b }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-ufc btn w-100 mt-3">
+            Save Result
+        </button>
+
+    </form>
+</div>
+
+{% endblock %}

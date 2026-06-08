@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div style="border-bottom: 2px solid #D20A0A;
+            padding-bottom: 16px; margin-bottom: 24px;">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <p style="color: #D20A0A; text-transform: uppercase;
+                      letter-spacing: 3px; font-size: 0.75rem;
+                      margin-bottom: 4px;">Admin Panel</p>
+            <h2 style="font-weight: 900; text-transform: uppercase;
+                       letter-spacing: 2px; color: #FAFBFD; margin: 0;">
+                Add Fight — {{ event.name }}
+            </h2>
+        </div>
+        <a href="{{ url_for('event_fights', event_id=event.id) }}"
+           class="btn-ufc-outline btn">
+            Back to Fight Card
+        </a>
+    </div>
+</div>
+
+<div class="ufc-card p-4">
+    <form method="POST">
+
+        <h5 style="color: #D20A0A; font-weight: 900;
+                   text-transform: uppercase; letter-spacing: 2px;
+                   border-bottom: 1px solid #3A3A42;
+                   padding-bottom: 10px; margin-bottom: 20px;">
+            Fighter 1
+        </h5>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Fighter 1 Name *</label>
+                <input type="text" name="fighter1"
+                       class="form-control" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Fighter 1 Record</label>
+                <input type="text" name="fighter1_record"
+                       class="form-control"
+                       placeholder="27-1-0">
+            </div>
+        </div>
+
+        <h5 style="color: #D20A0A; font-weight: 900;
+                   text-transform: uppercase; letter-spacing: 2px;
+                   border-bottom: 1px solid #3A3A42;
+                   padding-bottom: 10px; margin-bottom: 20px;
+                   margin-top: 10px;">
+            Fighter 2
+        </h5>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Fighter 2 Name *</label>
+                <input type="text" name="fighter2"
+                       class="form-control" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Fighter 2 Record</label>
+                <input type="text" name="fighter2_record"
+                       class="form-control"
+                       placeholder="20-4-0">
+            </div>
+        </div>
+
+        <h5 style="color: #D20A0A; font-weight: 900;
+                   text-transform: uppercase; letter-spacing: 2px;
+                   border-bottom: 1px solid #3A3A42;
+                   padding-bottom: 10px; margin-bottom: 20px;
+                   margin-top: 10px;">
+            Fight Details
+        </h5>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label>Weight Class</label>
+                <select name="weight_class" class="form-control">
+                    <option value="">Select Weight Class</option>
+                    {% for wc in ['Strawweight','Flyweight','Bantamweight','Featherweight','Lightweight','Welterweight','Middleweight','Light Heavyweight','Heavyweight'] %}
+                        <option value="{{ wc }}">{{ wc }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Card Position</label>
+                <select name="card_position" class="form-control">
+                    <option value="">Select Position</option>
+                    {% for pos in ['Main Event', 'Co-Main Event', 'Main Card', 'Preliminary', 'Early Preliminary'] %}
+                        <option value="{{ pos }}">{{ pos }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Display Order</label>
+                <input type="number" name="order"
+                       class="form-control" value="0">
+                <small style="color: #666666;">
+                    0 = top of card
+                </small>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="form-check mt-2">
+                    <input type="checkbox" name="is_title_fight"
+                           class="form-check-input" id="is_title_fight">
+                    <label class="form-check-label"
+                           for="is_title_fight"
+                           style="color: #FAFBFD; text-transform: none;
+                                  font-size: 0.9rem;">
+                        🏆 This is a Title Fight
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <label>Notes</label>
+                <input type="text" name="notes"
+                       class="form-control"
+                       placeholder="Example: Interim title fight, Catch weight etc">
+            </div>
+        </div>
+
+        <button type="submit" class="btn-ufc btn w-100 mt-3">
+            Add Fight
+        </button>
+
+    </form>
+</div>
+
+{% endblock %}

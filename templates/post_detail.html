@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Post Header -->
+<div style="border-bottom: 2px solid #D20A0A;
+            padding-bottom: 20px; margin-bottom: 24px;">
+    <span class="badge-ufc mb-3 d-inline-block">
+        {{ post.category }}
+    </span>
+    <h1 style="font-weight: 900; text-transform: uppercase;
+               letter-spacing: 2px; color: #FAFBFD;
+               font-size: 2rem;">
+        {{ post.title }}
+    </h1>
+    <p style="color: #888888; font-size: 0.85rem; margin-top: 8px;">
+        By {{ post.author }}
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        {{ post.date_posted }}
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        👁 {{ post.views }} views
+    </p>
+</div>
+
+<!-- Post Summary -->
+{% if post.summary %}
+<p style="color: #FAFBFD; font-size: 1.1rem; font-weight: 600;
+          border-left: 4px solid #D20A0A; padding-left: 16px;
+          margin-bottom: 24px;">
+    {{ post.summary }}
+</p>
+{% endif %}
+
+<!-- Post Content -->
+<div style="color: #CCCCCC; font-size: 1rem;
+            line-height: 1.8;">
+    {{ post.content }}
+</div>
+
+<!-- Footer -->
+
+<div style="border-top: 1px solid #3A3A42;
+            margin-top: 40px; padding-top: 20px;
+            display: flex; justify-content: space-between;
+            align-items: center;">
+    <a href="{{ url_for('news') }}" class="btn-ufc-outline btn btn-sm">
+        ← Back to News
+    </a>
+    <p style="color: #666666; font-size: 0.75rem;
+              text-transform: uppercase; letter-spacing: 1px;">
+        MMA Dropzone — {{ post.date_posted }}
+    </p>
+</div>
+
+{% endblock %}

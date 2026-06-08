@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+
+        <!-- Logo -->
+        <div class="text-center mb-4">
+            <img src="{{ url_for('static', filename='images/mdz.jpg') }}"
+                 alt="MMA Dropzone"
+                 height="80">
+            <h2 style="font-weight: 900; text-transform: uppercase;
+                       letter-spacing: 3px; color: #FAFBFD;
+                       margin-top: 12px;">
+                MMA <span style="color: #D20A0A;">Dropzone</span>
+            </h2>
+            <p style="color: #666666; text-transform: uppercase;
+                      letter-spacing: 2px; font-size: 0.75rem;">
+                Create Your Account
+            </p>
+        </div>
+
+        <!-- Register Card -->
+        <div class="ufc-card p-4">
+
+            <h5 style="font-weight: 900; text-transform: uppercase;
+                       letter-spacing: 2px; color: #D20A0A;
+                       border-bottom: 2px solid #D20A0A;
+                       padding-bottom: 10px; margin-bottom: 20px;">
+                Register
+            </h5>
+
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div style="background: #2A0000; border: 1px solid #D20A0A;
+                                    color: #FAFBFD; padding: 10px 14px;
+                                    border-radius: 4px; margin-bottom: 16px;
+                                    font-size: 0.85rem;">
+                            ⚠️ {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST">
+                <div class="mb-3">
+                    <label>Username *</label>
+                    <input type="text"
+                           name="username"
+                           class="form-control mt-1"
+                           placeholder="minimum 3 characters"
+                           required>
+                </div>
+                <div class="mb-3">
+                    <label>Email *</label>
+                    <input type="email"
+                           name="email"
+                           class="form-control mt-1"
+                           placeholder="your@email.com"
+                           required>
+                </div>
+                <div class="mb-3">
+                    <label>Password *</label>
+                    <input type="password"
+                           name="password"
+                           class="form-control mt-1"
+                           placeholder="minimum 8 characters"
+                           required>
+                </div>
+                <div class="mb-4">
+                    <label>Confirm Password *</label>
+                    <input type="password"
+                           name="confirm_password"
+                           class="form-control mt-1"
+                           placeholder="repeat your password"
+                           required>
+                </div>
+
+                <button type="submit" class="btn-ufc btn w-100">
+                    Create Account
+                </button>
+            </form>
+
+            <p class="text-center mt-3"
+               style="color: #666666; font-size: 0.85rem;">
+                Already have an account?
+                <a href="{{ url_for('login') }}"
+                   style="color: #D20A0A; font-weight: 700;">
+                    Login here
+                </a>
+            </p>
+
+        </div>
+
+        <p class="text-center mt-3"
+           style="color: #444444; font-size: 0.75rem;
+                  text-transform: uppercase; letter-spacing: 1px;">
+            MMA Dropzone © 2026
+        </p>
+
+    </div>
+</div>
+
+{% endblock %}

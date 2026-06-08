@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div style="border-bottom: 2px solid #D20A0A;
+            padding-bottom: 16px; margin-bottom: 24px;">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <p style="color: #D20A0A; text-transform: uppercase;
+                      letter-spacing: 3px; font-size: 0.75rem;
+                      margin-bottom: 4px;">Admin Panel</p>
+            <h2 style="font-weight: 900; text-transform: uppercase;
+                       letter-spacing: 2px; color: #FAFBFD; margin: 0;">
+                Edit Post
+            </h2>
+        </div>
+        <a href="{{ url_for('admin_posts') }}" class="btn-ufc-outline btn">
+            Back to Posts
+        </a>
+    </div>
+</div>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div style="background: #0a2a0a; border: 1px solid #00aa00;
+                        color: #00ff00; padding: 10px 14px;
+                        border-radius: 4px; margin-bottom: 16px;">
+                ✅ {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<div class="ufc-card p-4">
+    <form method="POST" enctype="multipart/form-data">
+
+        <h5 style="color: #D20A0A; font-weight: 900;
+                   text-transform: uppercase; letter-spacing: 2px;
+                   border-bottom: 1px solid #3A3A42;
+                   padding-bottom: 10px; margin-bottom: 20px;">
+            Post Information
+        </h5>
+        <div class="row">
+            <div class="col-md-8 mb-3">
+                <label>Title *</label>
+                <input type="text" name="title"
+                       class="form-control"
+                       value="{{ post.title }}" required>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Category</label>
+                <select name="category" class="form-control">
+                    {% for cat in ['UFC News','Nepali MMA','Fighter News','Event Preview','Event Results'] %}
+                        <option value="{{ cat }}"
+                            {% if cat == post.category %}selected{% endif %}>
+                            {{ cat }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Cover Image -->
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <label>Cover Image</label>
+                {% if post.image %}
+                    <div class="mb-2">
+                        <img src="{{ url_for('static', filename='images/posts/' + post.image) }}"
+                             alt="{{ post.title }}"
+                             style="height: 120px; border-radius: 4px;
+                                    border: 2px solid #D20A0A;">
+                        <small style="color: #888888; display: block;
+                                      margin-top: 4px;">
+                            Current cover image
+                        </small>
+                    </div>
+                {% endif %}
+                <input type="file"
+                       name="image"
+                       class="form-control"
+                       accept="image/*">
+                <small style="color: #666666;">
+                    Upload new image to replace current one
+                </small>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <label>Summary</label>
+                <input type="text" name="summary"
+                       class="form-control"
+                       value="{{ post.summary }}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <label>Content *</label>
+                <textarea name="content"
+                          class="form-control"
+                          rows="10" required>{{ post.content }}</textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Author</label>
+                <input type="text" name="author"
+                       class="form-control"
+                       value="{{ post.author }}">
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="form-check mt-4">
+                    <input type="checkbox" name="is_published"
+                           class="form-check-input" id="is_published"
+                           {% if post.is_published %}checked{% endif %}>
+                    <label class="form-check-label" for="is_published"
+                           style="color: #FAFBFD; text-transform: none;
+                                  font-size: 0.9rem;">
+                        Published
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-ufc btn w-100 mt-3">
+            Save Changes
+        </button>
+
+    </form>
+</div>
+
+{% endblock %}

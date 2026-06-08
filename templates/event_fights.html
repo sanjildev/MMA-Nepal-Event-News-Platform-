@@ -1,0 +1,289 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div style="border-bottom: 2px solid #D20A0A;
+            padding-bottom: 16px; margin-bottom: 24px;">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <p style="color: #D20A0A; text-transform: uppercase;
+                      letter-spacing: 3px; font-size: 0.75rem;
+                      margin-bottom: 4px;">Admin Panel</p>
+            <h2 style="font-weight: 900; text-transform: uppercase;
+                       letter-spacing: 2px; color: #FAFBFD; margin: 0;">
+                {{ event.name }} — Fight Card
+            </h2>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{{ url_for('add_fight', event_id=event.id) }}"
+               class="btn-ufc btn">
+                Add Fight
+            </a>
+            <a href="{{ url_for('admin_events') }}"
+               class="btn-ufc-outline btn">
+                Back to Events
+            </a>
+        </div>
+    </div>
+</div>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div style="background: #0a2a0a; border: 1px solid #00aa00;
+                        color: #00ff00; padding: 10px 14px;
+                        border-radius: 4px; margin-bottom: 16px;">
+                ✅ {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<!-- Event Info -->
+<div class="ufc-card p-3 mb-4">
+    <div class="row">
+        <div class="col-md-3">
+            <p style="color: #666666; font-size: 0.75rem;
+                      text-transform: uppercase;">Date</p>
+            <p style="color: #FAFBFD; font-weight: 600;">
+                {{ event.date }}
+            </p>
+        </div>
+        <div class="col-md-3">
+            <p style="color: #666666; font-size: 0.75rem;
+                      text-transform: uppercase;">Venue</p>
+            <p style="color: #FAFBFD; font-weight: 600;">
+                {{ event.venue }}
+            </p>
+        </div>
+        <div class="col-md-3">
+            <p style="color: #666666; font-size: 0.75rem;
+                      text-transform: uppercase;">Nepal Time</p>
+            <p style="color: #D20A0A; font-weight: 600;">
+                🇳🇵 {{ event.nepal_time }}
+            </p>
+        </div>
+        <div class="col-md-3">
+            <p style="color: #666666; font-size: 0.75rem;
+                      text-transform: uppercase;">Total Fights</p>
+            <p style="color: #FAFBFD; font-weight: 600;">
+                {{ fights|length }}
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Fight Card -->
+{% if fights %}
+
+    <!-- Main Event -->
+    {% for fight in fights %}
+        {% if fight.card_position == 'Main Event' %}
+        <div class="ufc-card p-3 mb-3"
+             style="border-color: #D20A0A;">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="d-flex gap-2 align-items-center">
+                    <span class="badge-ufc">Main Event</span>
+                    {% if fight.is_title_fight %}
+                        <span style="color: gold; font-size: 0.75rem;
+                                     text-transform: uppercase;">
+                            🏆 Title Fight
+                        </span>
+                    {% endif %}
+                    {% if fight.is_completed %}
+                        <span style="color: #00ff00; font-size: 0.75rem;
+                                     text-transform: uppercase;">
+                            ✅ Completed
+                        </span>
+                    {% endif %}
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="{{ url_for('edit_fight', id=fight.id) }}"
+                       class="btn btn-sm btn-info">
+                        Edit
+                    </a>
+                    {% if not fight.is_completed %}
+                        <a href="{{ url_for('fight_result', id=fight.id) }}"
+                           class="btn btn-sm btn-warning">
+                            Add Result
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('fight_result', id=fight.id) }}"
+                           class="btn btn-sm btn-secondary">
+                            Edit Result
+                        </a>
+                    {% endif %}
+                    <a href="{{ url_for('delete_fight', id=fight.id) }}"
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('Delete this fight?')">
+                        Delete
+                    </a>
+                </div>
+            </div>
+            <div class="row align-items-center text-center">
+                <div class="col-md-5">
+                    <h4 style="font-weight: 900; text-transform: uppercase;
+                               color: {% if fight.is_completed and fight.winner == fight.fighter1 %}#00ff00{% else %}#FAFBFD{% endif %};">
+                        {{ fight.fighter1 }}
+                    </h4>
+                    <p style="color: #888888; font-size: 0.85rem;">
+                        {{ fight.fighter1_record }}
+                    </p>
+                </div>
+                <div class="col-md-2">
+                    <p style="color: #D20A0A; font-weight: 900;
+                              font-size: 1.5rem;">VS</p>
+                    <p style="color: #666666; font-size: 0.75rem;">
+                        {{ fight.weight_class }}
+                    </p>
+                </div>
+                <div class="col-md-5">
+                    <h4 style="font-weight: 900; text-transform: uppercase;
+                               color: {% if fight.is_completed and fight.winner == fight.fighter2 %}#00ff00{% else %}#FAFBFD{% endif %};">
+                        {{ fight.fighter2 }}
+                    </h4>
+                    <p style="color: #888888; font-size: 0.85rem;">
+                        {{ fight.fighter2_record }}
+                    </p>
+                </div>
+            </div>
+            {% if fight.is_completed %}
+                <div class="text-center mt-2"
+                     style="border-top: 1px solid #3A3A42; padding-top: 8px;">
+                    <span style="color: #00ff00; font-weight: 700;">
+                        Winner: {{ fight.winner }}
+                    </span>
+                    <span style="color: #888888; margin-left: 12px;">
+                        {{ fight.method }}
+                        {% if fight.round_finished %}
+                            R{{ fight.round_finished }}
+                        {% endif %}
+                        {% if fight.time_finished %}
+                            {{ fight.time_finished }}
+                        {% endif %}
+                    </span>
+                    {% if fight.bonus %}
+                        <span style="color: gold; margin-left: 12px;">
+                            🏆 {{ fight.bonus }}
+                        </span>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+        {% endif %}
+    {% endfor %}
+
+    <!-- Other Fights -->
+    {% for position in ['Co-Main Event', 'Main Card', 'Preliminary', 'Early Preliminary'] %}
+        {% set position_fights = fights|selectattr('card_position', 'equalto', position)|list %}
+        {% if position_fights %}
+        <h5 style="color: #888888; text-transform: uppercase;
+                   letter-spacing: 2px; font-size: 0.8rem;
+                   margin: 20px 0 10px 0;
+                   border-bottom: 1px solid #3A3A42;
+                   padding-bottom: 8px;">
+            {{ position }}
+        </h5>
+        {% for fight in position_fights %}
+        <div class="ufc-card p-3 mb-2">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="row align-items-center w-100 me-3">
+                    <div class="col-md-3 text-end">
+                        <p style="font-weight: 700; margin: 0;
+                                  text-transform: uppercase;
+                                  color: {% if fight.is_completed and fight.winner == fight.fighter1 %}#00ff00{% else %}#FAFBFD{% endif %};">
+                            {{ fight.fighter1 }}
+                        </p>
+                        <small style="color: #888888;">
+                            {{ fight.fighter1_record }}
+                        </small>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <span style="color: #D20A0A; font-weight: 900;">
+                            VS
+                        </span>
+                        <br>
+                        <small style="color: #666666; font-size: 0.7rem;">
+                            {{ fight.weight_class }}
+                        </small>
+                    </div>
+                    <div class="col-md-3">
+                        <p style="font-weight: 700; margin: 0;
+                                  text-transform: uppercase;
+                                  color: {% if fight.is_completed and fight.winner == fight.fighter2 %}#00ff00{% else %}#FAFBFD{% endif %};">
+                            {{ fight.fighter2 }}
+                        </p>
+                        <small style="color: #888888;">
+                            {{ fight.fighter2_record }}
+                        </small>
+                    </div>
+                    <div class="col-md-4">
+                        {% if fight.is_completed %}
+                            <small style="color: #00ff00; font-weight: 700;">
+                                ✅ {{ fight.winner }}
+                            </small>
+                            <br>
+                            <small style="color: #888888;">
+                                {{ fight.method }}
+                                {% if fight.round_finished %}
+                                    R{{ fight.round_finished }}
+                                {% endif %}
+                                {% if fight.time_finished %}
+                                    {{ fight.time_finished }}
+                                {% endif %}
+                            </small>
+                            {% if fight.bonus %}
+                                <br>
+                                <small style="color: gold;">
+                                    🏆 {{ fight.bonus }}
+                                </small>
+                            {% endif %}
+                        {% else %}
+                            <small style="color: #D20A0A;">
+                                🔴 Upcoming
+                            </small>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="d-flex gap-1 flex-shrink-0">
+                    <a href="{{ url_for('edit_fight', id=fight.id) }}"
+                       class="btn btn-sm btn-info">
+                        Edit
+                    </a>
+                    {% if not fight.is_completed %}
+                        <a href="{{ url_for('fight_result', id=fight.id) }}"
+                           class="btn btn-sm btn-warning">
+                            Result
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('fight_result', id=fight.id) }}"
+                           class="btn btn-sm btn-secondary">
+                            Edit Result
+                        </a>
+                    {% endif %}
+                    <a href="{{ url_for('delete_fight', id=fight.id) }}"
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('Delete?')">
+                        ✕
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    {% endfor %}
+
+{% else %}
+    <div class="text-center py-5">
+        <p style="color: #666666; text-transform: uppercase;
+                  letter-spacing: 2px;">
+            No fights added yet!
+        </p>
+        <a href="{{ url_for('add_fight', event_id=event.id) }}"
+           class="btn-ufc btn mt-2">
+            Add First Fight
+        </a>
+    </div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Header -->
+<div style="border-bottom: 2px solid #D20A0A;
+            padding-bottom: 16px; margin-bottom: 24px;">
+    <h2 style="font-weight: 900; text-transform: uppercase;
+               letter-spacing: 2px; color: #FAFBFD; margin: 0;">
+        Fighters
+    </h2>
+</div>
+
+<!-- Nepali Fighters Section -->
+{% if nepali_fighters %}
+<div class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="section-header">🇳🇵 Nepali Fighters</h3>
+    </div>
+    <div class="row">
+        {% for fighter in nepali_fighters %}
+        <div class="col-md-3 mb-3">
+            <div class="ufc-card text-center p-3 h-100">
+                {% if fighter.image %}
+                    <img src="{{ url_for('static', filename='images/fighters/' + fighter.image) }}"
+                         alt="{{ fighter.name }}"
+                         style="width: 100%; height: 260px;
+                                object-fit: cover;object-position: top; border-radius: 4px;
+                                margin-bottom: 12px;">
+                {% else %}
+                    <div style="width: 100%; height: 260px;
+                                background: #2A2A30; border-radius: 4px;
+                                margin-bottom: 12px; display: flex;
+                                align-items: center; justify-content: center;">
+                        <span style="color: #444444; font-size: 3rem;">🥊</span>
+                    </div>
+                {% endif %}
+                <span class="badge-ufc mb-2 d-inline-block">
+                    🇳🇵 Nepal
+                </span>
+                <h5 style="font-weight: 900; text-transform: uppercase;
+                           letter-spacing: 1px; font-size: 0.95rem;
+                           color: #FAFBFD; margin-top: 8px;">
+                    {{ fighter.name }}
+                </h5>
+                <p style="color: #888888; font-size: 0.85rem;" class="mb-1">
+                    {{ fighter.nickname }}
+                </p>
+                <p style="color: #666666; font-size: 0.8rem;" class="mb-2">
+                    {{ fighter.weight_class }}
+                </p>
+                <p style="color: #D20A0A; font-weight: 900;
+                          font-size: 1.1rem;">
+                    {{ fighter.wins }}-{{ fighter.losses }}-{{ fighter.draws }}
+                </p>
+                <a href="{{ url_for('fighter_detail', id=fighter.id) }}"
+                   class="btn-ufc btn w-100 btn-sm">
+                    View Profile
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<!-- All Fighters Section -->
+<div class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="section-header">All Fighters</h3>
+    </div>
+
+    <!-- Weight Class Filter -->
+    <div class="mb-4" style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <a href="{{ url_for('fighters') }}"
+           class="{% if active_weight == 'All' %}btn-ufc{% else %}btn-ufc-outline{% endif %} btn btn-sm">
+            All
+        </a>
+        {% for wc in ['Strawweight','Flyweight','Bantamweight','Featherweight','Lightweight','Welterweight','Middleweight','Light Heavyweight','Heavyweight'] %}
+            <a href="{{ url_for('fighters_by_weight', weight_class=wc) }}"
+               class="{% if active_weight == wc %}btn-ufc{% else %}btn-ufc-outline{% endif %} btn btn-sm">
+                {{ wc }}
+            </a>
+        {% endfor %}
+    </div>
+
+    {% if fighters %}
+    <div class="row">
+        {% for fighter in fighters %}
+        <div class="col-md-3 mb-3">
+            <div class="ufc-card text-center p-3 h-100">
+                {% if fighter.image %}
+                    <img src="{{ url_for('static', filename='images/fighters/' + fighter.image) }}"
+                         alt="{{ fighter.name }}"
+                         style="width: 100%; height: 260px;
+                                object-fit: cover;object-position: top; border-radius: 4px;
+                                margin-bottom: 12px;">
+                {% else %}
+                    <div style="width: 100%; height: 260px;
+                                background: #2A2A30; border-radius: 4px;
+                                margin-bottom: 12px; display: flex;
+                                align-items: center; justify-content: center;">
+                        <span style="color: #444444; font-size: 3rem;">🥊</span>
+                    </div>
+                {% endif %}
+                {% if fighter.is_nepali %}
+                    <span class="badge-ufc mb-2 d-inline-block">
+                        🇳🇵 Nepali
+                    </span>
+                {% endif %}
+                <h5 style="font-weight: 900; text-transform: uppercase;
+                           letter-spacing: 1px; font-size: 0.95rem;
+                           color: #FAFBFD; margin-top: 8px;">
+                    {{ fighter.name }}
+                </h5>
+                <p style="color: #888888; font-size: 0.85rem;" class="mb-1">
+                    {{ fighter.nickname }}
+                </p>
+                <p style="color: #666666; font-size: 0.8rem;" class="mb-2">
+                    {{ fighter.weight_class }}
+                </p>
+                <p style="color: #D20A0A; font-weight: 900;
+                          font-size: 1.1rem;">
+                    {{ fighter.wins }}-{{ fighter.losses }}-{{ fighter.draws }}
+                </p>
+                <a href="{{ url_for('fighter_detail', id=fighter.id) }}"
+                   class="btn-ufc btn w-100 btn-sm">
+                    View Profile
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <div class="text-center py-5">
+            <p style="color: #666666; text-transform: uppercase;
+                      letter-spacing: 2px;">
+                No fighters yet!
+            </p>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

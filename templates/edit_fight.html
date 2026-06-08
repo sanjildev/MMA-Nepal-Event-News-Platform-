@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div style="border-bottom: 2px solid #D20A0A;
+            padding-bottom: 16px; margin-bottom: 24px;">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <p style="color: #D20A0A; text-transform: uppercase;
+                      letter-spacing: 3px; font-size: 0.75rem;
+                      margin-bottom: 4px;">Admin Panel</p>
+            <h2 style="font-weight: 900; text-transform: uppercase;
+                       letter-spacing: 2px; color: #FAFBFD; margin: 0;">
+                Edit Fight
+            </h2>
+        </div>
+        <a href="{{ url_for('event_fights', event_id=fight.event_id) }}"
+           class="btn-ufc-outline btn">
+            Back to Fight Card
+        </a>
+    </div>
+</div>
+
+<div class="ufc-card p-4">
+    <form method="POST">
+
+        <h5 style="color: #D20A0A; font-weight: 900;
+                   text-transform: uppercase; letter-spacing: 2px;
+                   border-bottom: 1px solid #3A3A42;
+                   padding-bottom: 10px; margin-bottom: 20px;">
+            Fighter 1
+        </h5>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Fighter 1 Name *</label>
+                <input type="text" name="fighter1"
+                       class="form-control"
+                       value="{{ fight.fighter1 }}" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Fighter 1 Record</label>
+                <input type="text" name="fighter1_record"
+                       class="form-control"
+                       value="{{ fight.fighter1_record }}">
+            </div>
+        </div>
+
+        <h5 style="color: #D20A0A; font-weight: 900;
+                   text-transform: uppercase; letter-spacing: 2px;
+                   border-bottom: 1px solid #3A3A42;
+                   padding-bottom: 10px; margin-bottom: 20px;
+                   margin-top: 10px;">
+            Fighter 2
+        </h5>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Fighter 2 Name *</label>
+                <input type="text" name="fighter2"
+                       class="form-control"
+                       value="{{ fight.fighter2 }}" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Fighter 2 Record</label>
+                <input type="text" name="fighter2_record"
+                       class="form-control"
+                       value="{{ fight.fighter2_record }}">
+            </div>
+        </div>
+
+        <h5 style="color: #D20A0A; font-weight: 900;
+                   text-transform: uppercase; letter-spacing: 2px;
+                   border-bottom: 1px solid #3A3A42;
+                   padding-bottom: 10px; margin-bottom: 20px;
+                   margin-top: 10px;">
+            Fight Details
+        </h5>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label>Weight Class</label>
+                <select name="weight_class" class="form-control">
+                    {% for wc in ['Strawweight','Flyweight','Bantamweight','Featherweight','Lightweight','Welterweight','Middleweight','Light Heavyweight','Heavyweight'] %}
+                        <option value="{{ wc }}"
+                            {% if wc == fight.weight_class %}selected{% endif %}>
+                            {{ wc }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Card Position</label>
+                <select name="card_position" class="form-control">
+                    {% for pos in ['Main Event', 'Co-Main Event', 'Main Card', 'Preliminary', 'Early Preliminary'] %}
+                        <option value="{{ pos }}"
+                            {% if pos == fight.card_position %}selected{% endif %}>
+                            {{ pos }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Display Order</label>
+                <input type="number" name="order"
+                       class="form-control"
+                       value="{{ fight.order }}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="form-check mt-2">
+                    <input type="checkbox" name="is_title_fight"
+                           class="form-check-input" id="is_title_fight"
+                           {% if fight.is_title_fight %}checked{% endif %}>
+                    <label class="form-check-label"
+                           for="is_title_fight"
+                           style="color: #FAFBFD; text-transform: none;
+                                  font-size: 0.9rem;">
+                        🏆 This is a Title Fight
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <label>Notes</label>
+                <input type="text" name="notes"
+                       class="form-control"
+                       value="{{ fight.notes }}">
+            </div>
+        </div>
+
+        <button type="submit" class="btn-ufc btn w-100 mt-3">
+            Save Changes
+        </button>
+
+    </form>
+</div>
+
+{% endblock %}

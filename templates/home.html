@@ -1,0 +1,334 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Hero Section with Countdown Timer -->
+<!-- Hero Section with Countdown Timer -->
+<div style="margin: -1.5rem -12px 2rem -12px;
+            border-bottom: 3px solid #D20A0A;
+            position: relative;
+            min-height: 690px;">
+
+    {% if next_event %}
+
+        <!-- Background Image -->
+        {% if next_event.image %}
+          <img src="{{ url_for('static', filename='images/events/' + next_event.image) }}"
+     style="position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover; object-position: center top;
+            filter: brightness(0.35);">
+        {% else %}
+            <div style="position: absolute; top: 0; left: 0;
+                        width: 100%; height: 100%;
+                        background: linear-gradient(135deg, #000000 0%, #19191E 50%, #2A0000 100%);">
+            </div>
+        {% endif %}
+
+        <!-- Content on top of image -->
+        <div style="position: relative; z-index: 1;
+                    padding: 120px 20px; text-align: center;">
+
+            <p style="color: #D20A0A; text-transform: uppercase;
+                      letter-spacing: 4px; font-size: 0.8rem;
+                      margin-bottom: 12px;">
+                Next Event
+            </p>
+            <h1 style="font-size: 3.5rem; font-weight: 900;
+                       text-transform: uppercase; letter-spacing: 4px;
+                       color: #FAFBFD; margin-bottom: 8px;
+                       text-shadow: 2px 2px 12px rgba(0,0,0,0.9);">
+                {{ next_event.name }}
+            </h1>
+            <p style="color: #FAFBFD; font-weight: 700;
+                      font-size: 1.3rem; margin-bottom: 8px;
+                      text-shadow: 1px 1px 6px rgba(0,0,0,0.9);">
+                {{ next_event.main_event }}
+            </p>
+            <p style="color: #cccccc; font-size: 0.85rem;
+                      margin-bottom: 32px;
+                      text-shadow: 1px 1px 4px rgba(0,0,0,0.9);">
+                📍 {{ next_event.venue }}, {{ next_event.city }}
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+                🇳🇵 Nepal Time: {{ next_event.nepal_time }}
+            </p>
+
+            <!-- Countdown Timer -->
+            <div style="display: inline-flex; gap: 12px; margin-bottom: 32px;">
+                <div style="background: rgba(0,0,0,0.75);
+                            border: 2px solid #D20A0A;
+                            padding: 14px 22px; border-radius: 4px;
+                            min-width: 85px; text-align: center;
+                            backdrop-filter: blur(8px);">
+                    <div id="days" style="font-size: 2.2rem; font-weight: 900;
+                                          color: #D20A0A; line-height: 1;">00</div>
+                    <div style="color: #aaaaaa; font-size: 0.65rem;
+                                text-transform: uppercase; letter-spacing: 2px;
+                                margin-top: 6px;">Days</div>
+                </div>
+                <div style="background: rgba(0,0,0,0.75);
+                            border: 2px solid #D20A0A;
+                            padding: 14px 22px; border-radius: 4px;
+                            min-width: 85px; text-align: center;
+                            backdrop-filter: blur(8px);">
+                    <div id="hours" style="font-size: 2.2rem; font-weight: 900;
+                                           color: #D20A0A; line-height: 1;">00</div>
+                    <div style="color: #aaaaaa; font-size: 0.65rem;
+                                text-transform: uppercase; letter-spacing: 2px;
+                                margin-top: 6px;">Hours</div>
+                </div>
+                <div style="background: rgba(0,0,0,0.75);
+                            border: 2px solid #D20A0A;
+                            padding: 14px 22px; border-radius: 4px;
+                            min-width: 85px; text-align: center;
+                            backdrop-filter: blur(8px);">
+                    <div id="minutes" style="font-size: 2.2rem; font-weight: 900;
+                                             color: #D20A0A; line-height: 1;">00</div>
+                    <div style="color: #aaaaaa; font-size: 0.65rem;
+                                text-transform: uppercase; letter-spacing: 2px;
+                                margin-top: 6px;">Mins</div>
+                </div>
+                <div style="background: rgba(0,0,0,0.75);
+                            border: 2px solid #D20A0A;
+                            padding: 14px 22px; border-radius: 4px;
+                            min-width: 85px; text-align: center;
+                            backdrop-filter: blur(8px);">
+                    <div id="seconds" style="font-size: 2.2rem; font-weight: 900;
+                                             color: #D20A0A; line-height: 1;">00</div>
+                    <div style="color: #aaaaaa; font-size: 0.65rem;
+                                text-transform: uppercase; letter-spacing: 2px;
+                                margin-top: 6px;">Secs</div>
+                </div>
+            </div>
+
+            <br>
+            <a href="{{ url_for('event_detail', id=next_event.id) }}"
+               class="btn-ufc btn"
+               style="padding: 12px 32px; font-size: 1rem;">
+                View Full Card
+            </a>
+        </div>
+
+    {% else %}
+        <div style="position: relative; z-index: 1;
+                    padding: 80px 20px; text-align: center;
+                    background: linear-gradient(135deg, #000000 0%, #19191E 50%, #2A0000 100%);">
+            <h1 style="font-size: 3.5rem; font-weight: 900;
+                       text-transform: uppercase; letter-spacing: 4px;
+                       color: #FAFBFD;">
+                MMA <span style="color: #D20A0A;">Dropzone</span>
+            </h1>
+            <p style="color: #888888; text-transform: uppercase;
+                      letter-spacing: 3px; font-size: 0.9rem;">
+                Your #1 Source for UFC & Nepali MMA News 🇳🇵
+            </p>
+        </div>
+    {% endif %}
+
+    <script>
+        {% if next_event %}
+        var eventDate = new Date("{{ next_event.date }}T00:00:00");
+        function updateTimer() {
+            var now = new Date();
+            var diff = eventDate - now;
+            if (diff <= 0) {
+                document.getElementById('days').innerHTML = '00';
+                document.getElementById('hours').innerHTML = '00';
+                document.getElementById('minutes').innerHTML = '00';
+                document.getElementById('seconds').innerHTML = '00';
+                return;
+            }
+            var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            document.getElementById('days').innerHTML = days < 10 ? '0' + days : days;
+            document.getElementById('hours').innerHTML = hours < 10 ? '0' + hours : hours;
+            document.getElementById('minutes').innerHTML = minutes < 10 ? '0' + minutes : minutes;
+            document.getElementById('seconds').innerHTML = seconds < 10 ? '0' + seconds : seconds;
+        }
+        updateTimer();
+        setInterval(updateTimer, 1000);
+        {% endif %}
+    </script>
+</div>
+<!-- Latest News -->
+<div class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="section-header">Latest News</h3>
+        <a href="{{ url_for('news') }}" class="btn-ufc-outline btn">View All</a>
+    </div>
+    {% if latest_posts %}
+    <div class="row">
+        {% for post in latest_posts %}
+        <div class="col-md-4 mb-3">
+            <div class="ufc-card h-100 p-0">
+                {% if post.image %}
+                    <img src="{{ url_for('static', filename='images/posts/' + post.image) }}"
+                         alt="{{ post.title }}"
+                         style="width: 100%; height: 260px;
+                                object-fit: cover; object-position: center;
+                                border-radius: 4px 4px 0 0;">
+                {% else %}
+                    <div style="width: 100%; height: 260px;
+                                background: linear-gradient(135deg, #2A0000, #19191E);
+                                border-radius: 4px 4px 0 0;
+                                display: flex; align-items: center;
+                                justify-content: center;">
+                        <span style="color: #D20A0A; font-size: 2rem;">📰</span>
+                    </div>
+                {% endif %}
+                <div class="p-3">
+                    <span class="badge-ufc mb-2 d-inline-block">
+                        {{ post.category }}
+                    </span>
+                    <h5 style="font-weight: 700; text-transform: uppercase;
+                               font-size: 0.95rem; margin-top: 8px;
+                               color: #FAFBFD;">
+                        {{ post.title }}
+                    </h5>
+                    <p style="color: #888888; font-size: 0.85rem;">
+                        {{ post.summary }}
+                    </p>
+                </div>
+                <div class="p-3 d-flex justify-content-between align-items-center"
+                     style="border-top: 1px solid #3A3A42;">
+                    <small style="color: #666666;">{{ post.date_posted }}</small>
+                    <a href="{{ url_for('post_detail', id=post.id) }}"
+                       class="btn-ufc btn btn-sm">
+                        Read More
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <p style="color: #666666;">No posts yet!</p>
+    {% endif %}
+</div>
+
+<!-- Upcoming Events -->
+<!-- Upcoming Events -->
+<div class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="section-header">Upcoming Events</h3>
+        <a href="{{ url_for('events') }}" class="btn-ufc-outline btn">View All</a>
+    </div>
+    {% if upcoming_events %}
+    <div class="row">
+        {% for event in upcoming_events %}
+        <div class="col-md-4 mb-3">
+            <div class="ufc-card h-100 p-0">
+                {% if event.image %}
+                    <img src="{{ url_for('static', filename='images/events/' + event.image) }}"
+                         alt="{{ event.name }}"
+                         style="width: 100%; height: 260px;
+                                object-fit: cover; object-position: center;
+                                border-radius: 4px 4px 0 0;">
+                {% else %}
+                    <div style="width: 100%; height: 260px;
+                                background: linear-gradient(135deg, #2A0000, #19191E);
+                                border-radius: 4px 4px 0 0;
+                                display: flex; align-items: center;
+                                justify-content: center;">
+                        <span style="color: #D20A0A; font-size: 2rem;">🥊</span>
+                    </div>
+                {% endif %}
+                <div class="p-3">
+                    <span class="badge-ufc mb-2 d-inline-block">
+                        {{ event.organization }}
+                    </span>
+                    <h5 style="font-weight: 900; text-transform: uppercase;
+                               letter-spacing: 1px; color: #FAFBFD;
+                               margin-top: 8px;">
+                        {{ event.name }}
+                    </h5>
+                    <p style="color: #FAFBFD; font-weight: 700;
+                              font-size: 0.9rem;">
+                        🥊 {{ event.main_event }}
+                    </p>
+                    <p style="color: #888888; font-size: 0.85rem;" class="mb-1">
+                        📅 {{ event.date }}
+                    </p>
+                    <p style="color: #888888; font-size: 0.85rem;" class="mb-1">
+                        📍 {{ event.venue }}, {{ event.city }}
+                    </p>
+                    <p style="color: #FAFBFD; font-size: 0.85rem;" class="mb-3">
+                        🇳🇵 Nepal Time: <strong>{{ event.nepal_time }}</strong>
+                    </p>
+                    <a href="{{ url_for('event_detail', id=event.id) }}"
+                       class="btn-ufc btn w-100">
+                        View Event
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <p style="color: #666666;">No upcoming events!</p>
+    {% endif %}
+</div>
+
+<!-- Featured Fighters -->
+<div class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="section-header">Featured Fighters</h3>
+        <a href="{{ url_for('fighters') }}" class="btn-ufc-outline btn">View All</a>
+    </div>
+    {% if featured_fighters %}
+    <div class="row">
+        {% for fighter in featured_fighters %}
+        <div class="col-md-3 mb-3">
+            <div class="ufc-card text-center p-0 h-100">
+                {% if fighter.image %}
+                    <img src="{{ url_for('static', filename='images/fighters/' + fighter.image) }}"
+                         alt="{{ fighter.name }}"
+                         style="width: 100%; height: 260px;
+                                object-fit: cover; object-position: top;
+                                border-radius: 4px 4px 0 0;">
+                {% else %}
+                    <div style="width: 100%; height: 260px;
+                                background: #2A2A30; border-radius: 4px 4px 0 0;
+                                display: flex; align-items: center;
+                                justify-content: center;">
+                        <span style="color: #444444; font-size: 3rem;">🥊</span>
+                    </div>
+                {% endif %}
+                <div class="p-3">
+                    {% if fighter.is_nepali %}
+                        <span class="badge-ufc mb-2 d-inline-block">
+                            🇳🇵 Nepali
+                        </span>
+                    {% endif %}
+                    <h5 style="font-weight: 900; text-transform: uppercase;
+                               letter-spacing: 1px; font-size: 0.95rem;
+                               color: #FAFBFD;">
+                        {{ fighter.name }}
+                    </h5>
+                    <p style="color: #888888; font-size: 0.85rem;" class="mb-1">
+                        {{ fighter.nickname }}
+                    </p>
+                    <p style="color: #666666; font-size: 0.8rem;" class="mb-2">
+                        {{ fighter.weight_class }}
+                    </p>
+                    <p style="color: #D20A0A; font-weight: 900;
+                              font-size: 1.1rem;">
+                        {{ fighter.wins }}-{{ fighter.losses }}-{{ fighter.draws }}
+                    </p>
+                    <a href="{{ url_for('fighter_detail', id=fighter.id) }}"
+                       class="btn-ufc btn w-100 btn-sm">
+                        View Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <p style="color: #666666;">No fighters yet!</p>
+    {% endif %}
+</div>
+
+{% endblock %}

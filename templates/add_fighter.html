@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div style="border-bottom: 2px solid #D20A0A;
+            padding-bottom: 16px; margin-bottom: 24px;">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <p style="color: #D20A0A; text-transform: uppercase;
+                      letter-spacing: 3px; font-size: 0.75rem;
+                      margin-bottom: 4px;">Admin Panel</p>
+            <h2 style="font-weight: 900; text-transform: uppercase;
+                       letter-spacing: 2px; color: #FAFBFD; margin: 0;">
+                Add New Fighter
+            </h2>
+        </div>
+        <a href="{{ url_for('admin') }}" class="btn-ufc-outline btn">
+            Dashboard
+        </a>
+    </div>
+</div>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div style="background: #0a2a0a; border: 1px solid #00aa00;
+                        color: #00ff00; padding: 10px 14px;
+                        border-radius: 4px; margin-bottom: 16px;">
+                ✅ {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<div class="ufc-card p-4">
+    <form method="POST" enctype="multipart/form-data">
+
+        <h5 style="color: #D20A0A; font-weight: 900;
+                   text-transform: uppercase; letter-spacing: 2px;
+                   border-bottom: 1px solid #3A3A42;
+                   padding-bottom: 10px; margin-bottom: 20px;">
+            Basic Information
+        </h5>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Fighter Name *</label>
+                <input type="text" name="name"
+                       class="form-control" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Nickname</label>
+                <input type="text" name="nickname"
+                       class="form-control">
+            </div>
+        </div>
+
+        <!-- Image Upload -->
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <label>Fighter Photo</label>
+                <input type="file"
+                       name="image"
+                       class="form-control"
+                       accept="image/*">
+                <small style="color: #666666;">
+                    Accepted: jpg, png, jpeg, gif, webp
+                </small>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Nationality</label>
+                <select name="nationality" class="form-control">
+                    <option value="">Select Country</option>
+                    <option value="Nepal">🇳🇵 Nepal</option>
+                    <optgroup label="All Countries">
+                    {% for country in countries %}
+                        <option value="{{ country }}">{{ country }}</option>
+                    {% endfor %}
+                    </optgroup>
+                </select>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Weight Class</label>
+                <select name="weight_class" class="form-control">
+                    <option value="">Select Weight Class</option>
+                    {% for wc in ['Strawweight','Flyweight','Bantamweight','Featherweight','Lightweight','Welterweight','Middleweight','Light Heavyweight','Heavyweight'] %}
+                        <option value="{{ wc }}">{{ wc }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Fighting Style</label>
+                <select name="fighting_style" class="form-control">
+                    <option value="">Select Style</option>
+                    {% for style in ['Boxing','BJJ','Wrestling','Muay Thai','Kickboxing','Sambo','MMA'] %}
+                        <option value="{{ style }}">{{ style }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <h5 style="color: #D20A0A; font-weight: 900;
+                   text-transform: uppercase; letter-spacing: 2px;
+                   border-bottom: 1px solid #3A3A42;
+                   padding-bottom: 10px; margin-bottom: 20px;
+                   margin-top: 20px;">
+            Fight Record
+        </h5>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label>Wins</label>
+                <input type="number" name="wins"
+                       class="form-control" value="0">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Losses</label>
+                <input type="number" name="losses"
+                       class="form-control" value="0">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Draws</label>
+                <input type="number" name="draws"
+                       class="form-control" value="0">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label>Wins by KO</label>
+                <input type="number" name="wins_by_ko"
+                       class="form-control" value="0">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Wins by Submission</label>
+                <input type="number" name="wins_by_sub"
+                       class="form-control" value="0">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Wins by Decision</label>
+                <input type="number" name="wins_by_dec"
+                       class="form-control" value="0">
+            </div>
+        </div>
+
+        <h5 style="color: #D20A0A; font-weight: 900;
+                   text-transform: uppercase; letter-spacing: 2px;
+                   border-bottom: 1px solid #3A3A42;
+                   padding-bottom: 10px; margin-bottom: 20px;
+                   margin-top: 20px;">
+            Social Media
+        </h5>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label>Instagram URL</label>
+                <input type="text" name="instagram" class="form-control">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Facebook URL</label>
+                <input type="text" name="facebook" class="form-control">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Twitter URL</label>
+                <input type="text" name="twitter" class="form-control">
+            </div>
+        </div>
+
+        <h5 style="color: #D20A0A; font-weight: 900;
+                   text-transform: uppercase; letter-spacing: 2px;
+                   border-bottom: 1px solid #3A3A42;
+                   padding-bottom: 10px; margin-bottom: 20px;
+                   margin-top: 20px;">
+            Nepali Fighter Details 🇳🇵
+        </h5>
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <div class="form-check">
+                    <input type="checkbox" name="is_nepali"
+                           class="form-check-input" id="is_nepali">
+                    <label class="form-check-label"
+                           for="is_nepali"
+                           style="color: #FAFBFD; text-transform: none;
+                                  font-size: 0.9rem;">
+                        This is a Nepali Fighter
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label>Province</label>
+                <select name="province" class="form-control">
+                    <option value="">Select Province</option>
+                    {% for p in ['Koshi','Madhesh','Bagmati','Gandaki','Lumbini','Karnali','Sudurpashchim'] %}
+                        <option value="{{ p }}">{{ p }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Gym / Training Camp</label>
+                <input type="text" name="gym" class="form-control">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Coach</label>
+                <input type="text" name="coach" class="form-control">
+            </div>
+        </div>
+
+        <button type="submit" class="btn-ufc btn w-100 mt-3">
+            Add Fighter
+        </button>
+
+    </form>
+</div>
+
+{% endblock %}

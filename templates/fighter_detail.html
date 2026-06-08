@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Back button -->
+<div class="mb-4">
+    <a href="{{ url_for('fighters') }}" class="btn-ufc-outline btn btn-sm">
+        ← Back to Fighters
+    </a>
+</div>
+
+<!-- Fighter Header -->
+<div style="background: linear-gradient(135deg, #000000 0%, #19191E 50%, #2A0000 100%);
+            border: 1px solid #D20A0A; border-radius: 4px;
+            padding: 30px; margin-bottom: 24px;">
+    <div class="row align-items-center">
+        <div class="col-md-3 text-center mb-3">
+            {% if fighter.image %}
+                <img src="{{ url_for('static', filename='images/fighters/' + fighter.image) }}"
+                     alt="{{ fighter.name }}"
+                     style="width: 100%; max-width: 200px;
+                            height: 220px; object-fit: cover;
+                            object-position: top;
+                            border-radius: 4px;
+                            border: 2px solid #D20A0A;">
+            {% else %}
+                <div style="width: 100%; max-width: 200px;
+                            height: 220px; background: #2A2A30;
+                            border-radius: 4px;
+                            border: 2px solid #D20A0A;
+                            display: flex; align-items: center;
+                            justify-content: center; margin: 0 auto;">
+                    <span style="color: #444444; font-size: 4rem;">🥊</span>
+                </div>
+            {% endif %}
+        </div>
+        <div class="col-md-5">
+            {% if fighter.is_nepali %}
+                <span class="badge-ufc mb-2 d-inline-block">
+                    🇳🇵 Nepali Fighter
+                </span>
+            {% endif %}
+            <h1 style="font-weight: 900; text-transform: uppercase;
+                       letter-spacing: 3px; color: #FAFBFD;
+                       font-size: 2rem; margin: 8px 0;">
+                {{ fighter.name }}
+            </h1>
+            {% if fighter.nickname %}
+            <p style="color: #D20A0A; font-size: 1.2rem;
+                      font-weight: 700; margin-bottom: 8px;">
+                "{{ fighter.nickname }}"
+            </p>
+            {% endif %}
+            <p style="color: #888888; font-size: 0.9rem;">
+                {{ fighter.nationality }}
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+                {{ fighter.weight_class }}
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+                {{ fighter.fighting_style }}
+            </p>
+        </div>
+        <div class="col-md-4 text-center">
+            <p style="color: #D20A0A; font-weight: 900;
+                      font-size: 3rem; margin: 0;">
+                {{ fighter.wins }}-{{ fighter.losses }}-{{ fighter.draws }}
+            </p>
+            <p style="color: #888888; text-transform: uppercase;
+                      letter-spacing: 2px; font-size: 0.75rem;">
+                Wins — Losses — Draws
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Fight Stats -->
+<div class="row mb-4">
+    <div class="col-md-4 mb-3">
+        <div class="ufc-card p-3 text-center">
+            <p style="color: #666666; text-transform: uppercase;
+                      letter-spacing: 2px; font-size: 0.7rem;
+                      margin-bottom: 8px;">
+                Wins by KO
+            </p>
+            <h2 style="color: #D20A0A; font-weight: 900; margin: 0;">
+                {{ fighter.wins_by_ko }}
+            </h2>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="ufc-card p-3 text-center">
+            <p style="color: #666666; text-transform: uppercase;
+                      letter-spacing: 2px; font-size: 0.7rem;
+                      margin-bottom: 8px;">
+                Wins by Submission
+            </p>
+            <h2 style="color: #D20A0A; font-weight: 900; margin: 0;">
+                {{ fighter.wins_by_sub }}
+            </h2>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="ufc-card p-3 text-center">
+            <p style="color: #666666; text-transform: uppercase;
+                      letter-spacing: 2px; font-size: 0.7rem;
+                      margin-bottom: 8px;">
+                Wins by Decision
+            </p>
+            <h2 style="color: #D20A0A; font-weight: 900; margin: 0;">
+                {{ fighter.wins_by_dec }}
+            </h2>
+        </div>
+    </div>
+</div>
+
+<!-- Nepali Fighter Details -->
+{% if fighter.is_nepali %}
+<div class="ufc-card p-3 mb-4">
+    <h5 style="color: #D20A0A; font-weight: 900;
+               text-transform: uppercase; letter-spacing: 2px;
+               border-bottom: 1px solid #3A3A42;
+               padding-bottom: 10px; margin-bottom: 16px;">
+        🇳🇵 Nepali Fighter Details
+    </h5>
+    <div class="row">
+        <div class="col-md-4">
+            <p style="color: #666666; text-transform: uppercase;
+                      letter-spacing: 1px; font-size: 0.75rem;
+                      margin-bottom: 4px;">Province</p>
+            <p style="color: #FAFBFD; font-weight: 600;">
+                {{ fighter.province }}
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p style="color: #666666; text-transform: uppercase;
+                      letter-spacing: 1px; font-size: 0.75rem;
+                      margin-bottom: 4px;">Gym / Training Camp</p>
+            <p style="color: #FAFBFD; font-weight: 600;">
+                {{ fighter.gym }}
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p style="color: #666666; text-transform: uppercase;
+                      letter-spacing: 1px; font-size: 0.75rem;
+                      margin-bottom: 4px;">Coach</p>
+            <p style="color: #FAFBFD; font-weight: 600;">
+                {{ fighter.coach }}
+            </p>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Social Media -->
+{% if fighter.instagram or fighter.facebook or fighter.twitter %}
+<div class="ufc-card p-3 mb-4">
+    <h5 style="color: #D20A0A; font-weight: 900;
+               text-transform: uppercase; letter-spacing: 2px;
+               border-bottom: 1px solid #3A3A42;
+               padding-bottom: 10px; margin-bottom: 16px;">
+        Social Media
+    </h5>
+    <div class="d-flex gap-3">
+        {% if fighter.instagram %}
+            <a href="{{ fighter.instagram }}"
+               target="_blank" class="btn-ufc btn btn-sm">
+                Instagram
+            </a>
+        {% endif %}
+        {% if fighter.facebook %}
+            <a href="{{ fighter.facebook }}"
+               target="_blank" class="btn-ufc btn btn-sm">
+                Facebook
+            </a>
+        {% endif %}
+        {% if fighter.twitter %}
+            <a href="{{ fighter.twitter }}"
+               target="_blank" class="btn-ufc btn btn-sm">
+                Twitter / X
+            </a>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

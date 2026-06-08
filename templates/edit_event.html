@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div style="border-bottom: 2px solid #D20A0A;
+            padding-bottom: 16px; margin-bottom: 24px;">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <p style="color: #D20A0A; text-transform: uppercase;
+                      letter-spacing: 3px; font-size: 0.75rem;
+                      margin-bottom: 4px;">Admin Panel</p>
+            <h2 style="font-weight: 900; text-transform: uppercase;
+                       letter-spacing: 2px; color: #FAFBFD; margin: 0;">
+                Edit Event — {{ event.name }}
+            </h2>
+        </div>
+        <a href="{{ url_for('admin_events') }}" class="btn-ufc-outline btn">
+            Back to Events
+        </a>
+    </div>
+</div>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div style="background: #0a2a0a; border: 1px solid #00aa00;
+                        color: #00ff00; padding: 10px 14px;
+                        border-radius: 4px; margin-bottom: 16px;">
+                ✅ {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<div class="ufc-card p-4">
+    <form method="POST"  enctype="multipart/form-data">
+
+        <h5 style="color: #D20A0A; font-weight: 900;
+                   text-transform: uppercase; letter-spacing: 2px;
+                   border-bottom: 1px solid #3A3A42;
+                   padding-bottom: 10px; margin-bottom: 20px;">
+            Event Information
+        </h5>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Event Name *</label>
+                <input type="text" name="name"
+                       class="form-control"
+                       value="{{ event.name }}" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Organization</label>
+                <select name="organization" class="form-control">
+                    {% for org in ['UFC','PFL','Bellator','ONE FC','Nepal MMA','Other'] %}
+                        <option value="{{ org }}"
+                            {% if org == event.organization %}selected{% endif %}>
+                            {{ org }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <!-- Event Poster -->
+<div class="row">
+    <div class="col-md-12 mb-3">
+        <label>Event Poster / Image</label>
+        {% if event.image %}
+            <div class="mb-2">
+                <img src="{{ url_for('static', filename='images/events/' + event.image) }}"
+                     alt="{{ event.name }}"
+                     style="height: 120px; border-radius: 4px;
+                            border: 2px solid #D20A0A;">
+                <small style="color: #888888; display: block;
+                              margin-top: 4px;">
+                    Current poster
+                </small>
+            </div>
+        {% endif %}
+        <input type="file"
+               name="image"
+               class="form-control"
+               accept="image/*">
+        <small style="color: #666666;">
+            Upload new image to replace current one
+        </small>
+    </div>
+</div>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label>Date</label>
+                <input type="date" name="date"
+                       class="form-control"
+                       value="{{ event.date }}">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Event Time (ET)</label>
+                <input type="text" name="event_time"
+                       class="form-control"
+                       value="{{ event.event_time }}">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Nepal Time 🇳🇵</label>
+                <input type="text" name="nepal_time"
+                       class="form-control"
+                       value="{{ event.nepal_time }}">
+            </div>
+        </div>
+
+        <h5 style="color: #D20A0A; font-weight: 900;
+                   text-transform: uppercase; letter-spacing: 2px;
+                   border-bottom: 1px solid #3A3A42;
+                   padding-bottom: 10px; margin-bottom: 20px;
+                   margin-top: 20px;">
+            Location
+        </h5>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label>Venue</label>
+                <input type="text" name="venue"
+                       class="form-control"
+                       value="{{ event.venue }}">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>City</label>
+                <input type="text" name="city"
+                       class="form-control"
+                       value="{{ event.city }}">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Country</label>
+                <input type="text" name="country"
+                       class="form-control"
+                       value="{{ event.country }}">
+            </div>
+        </div>
+
+        <h5 style="color: #D20A0A; font-weight: 900;
+                   text-transform: uppercase; letter-spacing: 2px;
+                   border-bottom: 1px solid #3A3A42;
+                   padding-bottom: 10px; margin-bottom: 20px;
+                   margin-top: 20px;">
+            Fight Card
+        </h5>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Main Event</label>
+                <input type="text" name="main_event"
+                       class="form-control"
+                       value="{{ event.main_event }}">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Co-Main Event</label>
+                <input type="text" name="co_main_event"
+                       class="form-control"
+                       value="{{ event.co_main_event }}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <label>Description</label>
+                <textarea name="description"
+                          class="form-control"
+                          rows="4">{{ event.description }}</textarea>
+            </div>
+        </div>
+
+        <h5 style="color: #D20A0A; font-weight: 900;
+                   text-transform: uppercase; letter-spacing: 2px;
+                   border-bottom: 1px solid #3A3A42;
+                   padding-bottom: 10px; margin-bottom: 20px;
+                   margin-top: 20px;">
+            Broadcast
+        </h5>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Where to Watch</label>
+                <select name="where_to_watch" class="form-control">
+                    {% for platform in ['ESPN+','UFC Fight Pass','PPV','ESPN','Other'] %}
+                        <option value="{{ platform }}"
+                            {% if platform == event.where_to_watch %}selected{% endif %}>
+                            {{ platform }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="form-check mt-4">
+                    <input type="checkbox" name="is_completed"
+                           class="form-check-input" id="is_completed"
+                           {% if event.is_completed %}checked{% endif %}>
+                    <label class="form-check-label" for="is_completed"
+                           style="color: #FAFBFD; text-transform: none;
+                                  font-size: 0.9rem;">
+                        Event Already Completed
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-ufc btn w-100 mt-3">
+            Save Changes
+        </button>
+
+    </form>
+</div>
+
+{% endblock %}

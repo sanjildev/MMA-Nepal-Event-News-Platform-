@@ -1,0 +1,244 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Admin Header -->
+<div style="border-bottom: 2px solid #D20A0A; 
+            padding-bottom: 16px; margin-bottom: 24px;">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <p style="color: #D20A0A; text-transform: uppercase;
+                      letter-spacing: 3px; font-size: 0.75rem;
+                      margin-bottom: 4px;">
+                Admin Panel
+            </p>
+            <h2 style="font-weight: 900; text-transform: uppercase;
+                       letter-spacing: 2px; color: #FAFBFD;
+                       margin: 0;">
+                Dashboard
+            </h2>
+        </div>
+        <a href="{{ url_for('logout') }}" class="btn-ufc btn">
+            Logout
+        </a>
+    </div>
+</div>
+
+<!-- Quick Stats -->
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="ufc-card p-3 text-center">
+            <p style="color: #666; text-transform: uppercase;
+                      letter-spacing: 2px; font-size: 0.7rem;
+                      margin-bottom: 8px;">
+                Total Fighters
+            </p>
+            <h1 style="color: #D20A0A; font-weight: 900;
+                       font-size: 2.5rem; margin: 0;">
+                {{ fighter_count }}
+            </h1>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="ufc-card p-3 text-center">
+            <p style="color: #666; text-transform: uppercase;
+                      letter-spacing: 2px; font-size: 0.7rem;
+                      margin-bottom: 8px;">
+                Total Events
+            </p>
+            <h1 style="color: #D20A0A; font-weight: 900;
+                       font-size: 2.5rem; margin: 0;">
+                {{ event_count }}
+            </h1>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="ufc-card p-3 text-center">
+            <p style="color: #666; text-transform: uppercase;
+                      letter-spacing: 2px; font-size: 0.7rem;
+                      margin-bottom: 8px;">
+                Total Posts
+            </p>
+            <h1 style="color: #D20A0A; font-weight: 900;
+                       font-size: 2.5rem; margin: 0;">
+                {{ post_count }}
+            </h1>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="ufc-card p-3 text-center">
+            <p style="color: #666; text-transform: uppercase;
+                      letter-spacing: 2px; font-size: 0.7rem;
+                      margin-bottom: 8px;">
+                Total Users
+            </p>
+            <h1 style="color: #D20A0A; font-weight: 900;
+                       font-size: 2.5rem; margin: 0;">
+                {{ user_count }}
+            </h1>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mb-4">
+    <div class="col-md-4 mb-3">
+        <div class="ufc-card p-3">
+            <h5 style="font-weight: 900; text-transform: uppercase;
+                       letter-spacing: 1px; color: #D20A0A;
+                       margin-bottom: 8px;">
+                Fighters
+            </h5>
+            <p style="color: #888; font-size: 0.85rem;">
+                Manage fighter profiles
+            </p>
+            <div class="d-flex gap-2">
+                <a href="{{ url_for('add_fighter') }}"
+                   class="btn-ufc btn btn-sm">
+                    Add Fighter
+                </a>
+                <a href="{{ url_for('admin_fighters') }}"
+                   class="btn-ufc-outline btn btn-sm">
+                    Manage
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="ufc-card p-3">
+            <h5 style="font-weight: 900; text-transform: uppercase;
+                       letter-spacing: 1px; color: #D20A0A;
+                       margin-bottom: 8px;">
+                Events
+            </h5>
+            <p style="color: #888; font-size: 0.85rem;">
+                Manage MMA events
+            </p>
+            <div class="d-flex gap-2">
+                <a href="{{ url_for('add_event') }}"
+                   class="btn-ufc btn btn-sm">
+                    Add Event
+                </a>
+                <a href="{{ url_for('admin_events') }}"
+                   class="btn-ufc-outline btn btn-sm">
+                    Manage
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="ufc-card p-3">
+            <h5 style="font-weight: 900; text-transform: uppercase;
+                       letter-spacing: 1px; color: #D20A0A;
+                       margin-bottom: 8px;">
+                News Posts
+            </h5>
+            <p style="color: #888; font-size: 0.85rem;">
+                Manage news articles
+            </p>
+            <div class="d-flex gap-2">
+                <a href="{{ url_for('add_post') }}"
+                   class="btn-ufc btn btn-sm">
+                    Add Post
+                </a>
+                <a href="{{ url_for('admin_posts') }}"
+                   class="btn-ufc-outline btn btn-sm">
+                    Manage
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <div class="ufc-card p-3">
+            <h5 style="font-weight: 900; text-transform: uppercase;
+                       letter-spacing: 1px; color: #D20A0A;
+                       border-bottom: 1px solid #3A3A42;
+                       padding-bottom: 10px; margin-bottom: 12px;">
+                Latest Posts
+            </h5>
+            {% if recent_posts %}
+                {% for post in recent_posts %}
+                <div style="border-bottom: 1px solid #2A2A30;
+                            padding: 8px 0;">
+                    <p style="color: #FAFBFD; font-size: 0.85rem;
+                              font-weight: 600; margin-bottom: 2px;">
+                        {{ post.title }}
+                    </p>
+                    <small style="color: #666;">
+                        {{ post.date_posted }}
+                    </small>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p style="color: #666; font-size: 0.85rem;">
+                    No posts yet!
+                </p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="ufc-card p-3">
+            <h5 style="font-weight: 900; text-transform: uppercase;
+                       letter-spacing: 1px; color: #D20A0A;
+                       border-bottom: 1px solid #3A3A42;
+                       padding-bottom: 10px; margin-bottom: 12px;">
+                Upcoming Events
+            </h5>
+            {% if upcoming_events %}
+                {% for event in upcoming_events %}
+                <div style="border-bottom: 1px solid #2A2A30;
+                            padding: 8px 0;">
+                    <p style="color: #FAFBFD; font-size: 0.85rem;
+                              font-weight: 600; margin-bottom: 2px;">
+                        {{ event.name }}
+                    </p>
+                    <small style="color: #666;">
+                        {{ event.date }}
+                    </small>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p style="color: #666; font-size: 0.85rem;">
+                    No events yet!
+                </p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="ufc-card p-3">
+            <h5 style="font-weight: 900; text-transform: uppercase;
+                       letter-spacing: 1px; color: #D20A0A;
+                       border-bottom: 1px solid #3A3A42;
+                       padding-bottom: 10px; margin-bottom: 12px;">
+                Latest Fighters
+            </h5>
+            {% if recent_fighters %}
+                {% for fighter in recent_fighters %}
+                <div style="border-bottom: 1px solid #2A2A30;
+                            padding: 8px 0;">
+                    <p style="color: #FAFBFD; font-size: 0.85rem;
+                              font-weight: 600; margin-bottom: 2px;">
+                        {{ fighter.name }}
+                        {% if fighter.is_nepali %}
+                            🇳🇵
+                        {% endif %}
+                    </p>
+                    <small style="color: #666;">
+                        {{ fighter.weight_class }}
+                    </small>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p style="color: #666; font-size: 0.85rem;">
+                    No fighters yet!
+                </p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

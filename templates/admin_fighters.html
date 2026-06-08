@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div style="border-bottom: 2px solid #D20A0A;
+            padding-bottom: 16px; margin-bottom: 24px;">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <p style="color: #D20A0A; text-transform: uppercase;
+                      letter-spacing: 3px; font-size: 0.75rem;
+                      margin-bottom: 4px;">
+                Admin Panel
+            </p>
+            <h2 style="font-weight: 900; text-transform: uppercase;
+                       letter-spacing: 2px; color: #FAFBFD; margin: 0;">
+                Manage Fighters
+            </h2>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{{ url_for('add_fighter') }}" class="btn-ufc btn">
+                Add Fighter
+            </a>
+            <a href="{{ url_for('admin') }}" class="btn-ufc-outline btn">
+                Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div style="background: #0a2a0a; border: 1px solid #00aa00;
+                        color: #00ff00; padding: 10px 14px;
+                        border-radius: 4px; margin-bottom: 16px;
+                        font-size: 0.85rem;">
+                ✅ {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<div class="ufc-card">
+    <div class="p-3">
+        {% if fighters %}
+      <table class="table table-ufc mb-0" 
+       style="background-color: transparent;">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Nickname</th>
+                    <th>Nationality</th>
+                    <th>Weight Class</th>
+                    <th>Record</th>
+                    <th>Nepali</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for fighter in fighters %}
+                <tr>
+                    <td style="color: #666666;">{{ fighter.id }}</td>
+                    <td style="font-weight: 700; color: #FAFBFD;">
+                        {{ fighter.name }}
+                    </td>
+                    <td style="color: #888888;">{{ fighter.nickname }}</td>
+                    <td style="color: #888888;">{{ fighter.nationality }}</td>
+                    <td>
+                        <span class="badge-ufc">{{ fighter.weight_class }}</span>
+                    </td>
+                    <td style="color: #D20A0A; font-weight: 700;">
+                        {{ fighter.wins }}-{{ fighter.losses }}-{{ fighter.draws }}
+                    </td>
+                    <td>
+                        {% if fighter.is_nepali %}
+                            <span style="color: #FAFBFD;">🇳🇵 Yes</span>
+                        {% else %}
+                            <span style="color: #666666;">No</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('edit_fighter', id=fighter.id) }}"
+                           class="btn btn-sm btn-warning me-1">
+                            Edit
+                        </a>
+                        <a href="{{ url_for('delete_fighter', id=fighter.id) }}"
+                           class="btn btn-sm btn-danger"
+                           onclick="return confirm('Are you sure you want to delete {{ fighter.name }}?')">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <div class="text-center py-5">
+                <p style="color: #666666; font-size: 1rem;
+                          text-transform: uppercase; letter-spacing: 2px;">
+                    No fighters added yet!
+                </p>
+                <a href="{{ url_for('add_fighter') }}" class="btn-ufc btn mt-2">
+                    Add Your First Fighter
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
